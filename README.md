@@ -10,7 +10,7 @@ All communication is via **RESTful HTTP endpoints**.
 
 ## Base URL
 ```
-http://localhost:8080
+http://localhost:5001
 ```
 
 ---
@@ -50,6 +50,22 @@ Validates if a user exists in the database with the provided credentials.
 "Invalid credentials"
 ```
 
+**Example Call (Python):**
+```python
+import requests
+
+payload = {"email": "user@example.com", "passwordHash": "hashed_password"}
+response = requests.post("http://localhost:5001/users/auth", json=payload)
+print(response.status_code, response.json())
+```
+
+**Example Call (curl):**
+```bash
+curl -X POST http://localhost:5001/users/auth \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","passwordHash":"hashed_password"}'
+```
+
 ---
 
 ### 2. Add User
@@ -82,6 +98,22 @@ Adds a new user to the database.
 **Error Response:**
 - Status: `400 Bad Request`
 - Body: Empty (if user could not be saved)
+
+**Example Call (Python):**
+```python
+import requests
+
+payload = {"email": "newuser@example.com", "passwordHash": "hashed_password"}
+response = requests.post("http://localhost:5001/users/add", json=payload)
+print(response.status_code, response.json())
+```
+
+**Example Call (curl):**
+```bash
+curl -X POST http://localhost:5001/users/add \
+  -H "Content-Type: application/json" \
+  -d '{"email":"newuser@example.com","passwordHash":"hashed_password"}'
+```
 
 ---
 
@@ -119,35 +151,6 @@ Adds a new user to the database.
 - These endpoints are **DEV ONLY**.
 - Ensure proper error handling for failed validations.
 - `createdAt` is automatically set by the server.
-
----
-
-## Example Usage (Python)
-```python
-import requests
-
-# Add a user
-payload = {"email": "test@example.com", "passwordHash": "hashed_password"}
-res = requests.post("http://localhost:5001/users/add", json=payload)
-print(res.status_code, res.json())
-
-# Authenticate a user
-payload = {"email": "test@example.com", "passwordHash": "hashed_password"}
-res = requests.post("http://localhost:5001/users/auth", json=payload)
-print(res.status_code, res.json())
-```
-
----
-
-## Error Handling
-
-| Status Code | Condition |
-|-------------|-----------|
-| 200 | Successful authentication |
-| 201 | User successfully created |
-| 400 | Failed to create user (e.g., email already exists) |
-| 401 | Invalid credentials |
-| 500 | Internal server error |
 
 ---
 
